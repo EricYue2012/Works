@@ -1,0 +1,73 @@
+
+<?php $_product = $this->getProduct(); ?>
+<!-- Start Call for price -->
+<?php if(Mage::helper('callforprice')->isEnableExtension()==true):?> 
+<?php $helper= Mage::helper('callforprice');     
+        $object = new  FME_Callforprice_Block_Callforprice;
+        $data =   $object->getRulesHtml($_product->getId());  ?>
+<?php if($data): ?>
+    <?php foreach ($data as $d):?>
+        <?php  $rules = $helper->fetchRule($d['rule_id']);  ?>
+
+<?php if (is_array($rules) AND !empty($rules)): ?>
+      <?php foreach ($rules as $r): ?>
+                <?php if($helper->DisplayAs()=='0'): ?>
+            <div class="add-to-cart">
+            <?php if(!$_product->isGrouped()): ?>
+                <label for="qty"><?php echo $this->__('Qty:') ?></label>
+                <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+                <?php endif; ?>
+                 <button type="button"  class="button btn-cart" onclick="Modalbox.show($('frmcontact'), {title:'Call For Price' ,pid:<?php  echo $_product->getId(); ?>}); return true;" ><span><span><?php echo $r['catalogtext'] ?></span></span></button>
+             </div>
+                <?php elseif($helper->DisplayAs()=='1'):?>
+            <div class="add-to-cart">
+            <?php if(!$_product->isGrouped()): ?>
+                <label for="qty"><?php echo $this->__('Qty:') ?></label>
+                <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+                <?php endif; ?>
+                <button type="button"  title="<?php echo strip_tags($r['tooltip']) ?>" class="button btn-cart"><span><span><?php echo $r['catalogtext'] ?></span></span></button>
+            </div>
+                <?php else:?>
+                 <div class="add-to-cart">
+            <?php if(!$_product->isGrouped()): ?>
+                <label for="qty"><?php echo $this->__('Qty:') ?></label>
+                <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+                <?php endif; ?>
+                <button type="button"  title="<?php echo strip_tags($r['tooltip']) ?>" class="button btn-cart" onclick="Modalbox.show($('frmcontact'), {title:'Call For Price' ,pid:<?php echo $_product->getId();?>}); return true;" ><span><span><?php echo $r['catalogtext'] ?></span></span></button>
+            </div>
+               <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
+<?php else: ?>
+        <!-- place code -->
+    
+    <?php $buttonTitle = $this->__('Add to Cart'); ?>
+<?php if($_product->isSaleable()): ?>
+    <div class="add-to-cart">
+        <?php if(!$_product->isGrouped()): ?>
+        <label for="qty"><?php echo $this->__('Qty:') ?></label>
+        <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+        <?php endif; ?>
+        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
+        <?php echo $this->getChildHtml('', true, true) ?>
+    </div>
+<?php endif; ?>
+        <!--end place code -->
+<?php endif; ?>
+
+<?php else: ?>
+      <!-- place code -->
+   <?php $buttonTitle = $this->__('Add to Cart'); ?>
+<?php if($_product->isSaleable()): ?>
+    <div class="add-to-cart">
+        <?php if(!$_product->isGrouped()): ?>
+        <label for="qty"><?php echo $this->__('Qty:') ?></label>
+        <input type="text" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo $this->__('Qty') ?>" class="input-text qty" />
+        <?php endif; ?>
+        <button type="button" title="<?php echo $buttonTitle ?>" class="button btn-cart" onclick="productAddToCartForm.submit(this)"><span><span><?php echo $buttonTitle ?></span></span></button>
+        <?php echo $this->getChildHtml('', true, true) ?>
+    </div>
+<?php endif; ?>
+     <!--end place code -->
+<?php endif;  ?>
